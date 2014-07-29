@@ -35,6 +35,5 @@ public class MockStaticTest {
 
         assertTrue("test failed,the person is not male", isMale);
 
-
     }
 }

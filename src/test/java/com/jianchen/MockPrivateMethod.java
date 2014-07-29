@@ -9,6 +9,7 @@ import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
 /**
@@ -20,7 +21,7 @@ import static junit.framework.Assert.assertTrue;
 public class MockPrivateMethod {
 
     /**
-     * 正常情况，传进去的就是为M的person
+     * 传进去的就是为M的person
      *
      * @throws Exception
      */
@@ -28,13 +29,13 @@ public class MockPrivateMethod {
     public void testMockPrivateMethod() throws Exception {
         PersonHelper personHelper = PowerMock.createPartialMock(PersonHelper.class, "isPersonType");
 
-        PowerMock.expectPrivate(personHelper, "isPersonType", EasyMock.anyObject()).andReturn(true);
+        PowerMock.expectPrivate(personHelper, "isPersonType", EasyMock.anyObject()).andReturn(false);
 
         EasyMock.replay(personHelper);
 
         Person person = new Person("jianchen", "M", 25);
 
-        assertTrue(personHelper.checkPersonIsValid(person));
+        assertFalse(personHelper.checkPersonIsValid(person));
     }
 
     /**
