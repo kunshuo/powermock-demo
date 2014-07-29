@@ -18,7 +18,7 @@ import static junit.framework.Assert.assertTrue;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(PersonHelper.class)
-public class MockPrivateMethod {
+public class MockPrivateMethodTest {
 
     /**
      * 传进去的就是为M的person
