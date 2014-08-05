@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.assertTrue;
@@ -37,6 +38,15 @@ public class MockitoTest {
         when(list.size()).thenReturn(5);
         assertTrue(list.size() == 5);
         verify(list, times(1)).size();
+    }
+
+    /**
+     * mock出来的对象，不会报索引越界异常
+     */
+    @Test
+    public void testaa() {
+        List<String> list = mock(List.class);
+        assertTrue(list.get(9) == null);
     }
 
 }
