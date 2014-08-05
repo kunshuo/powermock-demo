@@ -1,7 +1,10 @@
 package com.jianchen.mockito;
 
+import com.jianchen.biz.BaseService;
+import com.jianchen.biz.impl.SubService;
 import com.jianchen.exception.BizException;
 import com.jianchen.vo.Person;
+import com.sun.xml.internal.rngom.parse.host.Base;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -71,5 +74,23 @@ public class MockitoTest {
         assertEquals("how are you!", person.responseBack("how are you!"));
     }
 
+    /**
+     * 通过spy改变行为
+     */
+    @Test
+    public void testBaseMethod() {
+        SubService ss = new SubService();
+        ss.save();
 
+        //如下的方法没有效果，打印出super和sub的save
+        SubService subService = mock(SubService.class);
+        doNothing().when(((BaseService) subService)).validate();
+        subService.save();
+
+        //改用spy试试，成功了，仅打印出sub->save
+        SubService spy = spy(new SubService());
+        doNothing().when((BaseService) spy).validate();
+        spy.save();
+
+    }
 }
