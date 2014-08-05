@@ -53,6 +53,9 @@ public class MockitoTest {
         assertTrue(list.get(9) == null);
     }
 
+    /**
+     * 针对传进来的参数可以定制输出，做些额外的工作
+     */
     @Test
     public void testThenAnswer() {
         Person person = mock(Person.class);
