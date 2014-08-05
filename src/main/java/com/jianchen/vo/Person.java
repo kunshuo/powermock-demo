@@ -12,7 +12,6 @@ public class Person {
      */
     private String name;
     /**
-     * (
      * 性别
      */
     private String sex;
@@ -49,5 +48,16 @@ public class Person {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    /**
+     * 学人话，萌萌哒
+     *
+     * @param words
+     * @return
+     */
+    public String responseBack(String words) {
+        return "I hear you say " + words;
+
     }
 }

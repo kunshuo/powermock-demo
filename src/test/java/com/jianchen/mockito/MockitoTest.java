@@ -1,13 +1,17 @@
 package com.jianchen.mockito;
 
 import com.jianchen.exception.BizException;
+import com.jianchen.vo.Person;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -48,5 +52,21 @@ public class MockitoTest {
         List<String> list = mock(List.class);
         assertTrue(list.get(9) == null);
     }
+
+    @Test
+    public void testThenAnswer() {
+        Person person = mock(Person.class);
+        when(person.responseBack("how are you!")).thenAnswer(new Answer<String>() {
+            @Override
+            public String answer(InvocationOnMock invocationOnMock) throws Throwable {
+                Object[] args = invocationOnMock.getArguments();
+                System.out.println(invocationOnMock.getMethod()); //print: public java.lang.String com.jianchen.vo.Person.responseBack(java.lang.String)
+                return (String) args[0];
+            }
+        });
+
+        assertEquals("how are you!", person.responseBack("how are you!"));
+    }
+
 
 }
