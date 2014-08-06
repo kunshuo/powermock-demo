@@ -91,6 +91,6 @@ public class MockitoTest {
         SubService spy = spy(new SubService());
         doNothing().when((BaseService) spy).validate();
         spy.save();
-
     }
+
 }
