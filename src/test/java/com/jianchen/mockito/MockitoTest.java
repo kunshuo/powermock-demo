@@ -1,6 +1,7 @@
 package com.jianchen.mockito;
 
 import com.jianchen.biz.BaseService;
+import com.jianchen.biz.Container;
 import com.jianchen.biz.impl.SubService;
 import com.jianchen.exception.BizException;
 import com.jianchen.vo.Person;
@@ -23,6 +24,9 @@ import static org.mockito.Mockito.*;
  * @Date: 14-8-5 Time: 下午3:06
  */
 public class MockitoTest {
+    /**
+     * mock方法
+     */
     @Test
     public void testMockito() {
         List<String> list = mock(List.class);
@@ -31,6 +35,9 @@ public class MockitoTest {
         verify(list).get(0);
     }
 
+    /**
+     * 抛出异常
+     */
     @Test(expected = BizException.class)
     public void testMockito_throw_exception() {
         List<String> list = mock(List.class);
@@ -91,6 +98,15 @@ public class MockitoTest {
         SubService spy = spy(new SubService());
         doNothing().when((BaseService) spy).validate();
         spy.save();
+    }
+
+    /**
+     * 测试抽象类
+     */
+    @Test
+    public void testMockAbstractClass() {
+        Container container = mock(Container.class, Mockito.CALLS_REAL_METHODS);
+        assertEquals(4, container.getSize());
     }
 
 }
