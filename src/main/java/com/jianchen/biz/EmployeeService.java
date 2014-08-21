@@ -10,13 +10,12 @@ public class EmployeeService {
     /**
      * This method is responsible to return
      * the count of employees in the system.
-     * Currently this method does nothing but
-     * simply throws an exception.
-     *
+     * It does it by calling the
+     * static count method on the Employee class.
      * @return Total number of employees in the system.
      */
     public int getEmployeeCount() {
-        throw new UnsupportedOperationException();
+        return Employee.count();
     }
 
     public void saveEmployee(Employee employee){
