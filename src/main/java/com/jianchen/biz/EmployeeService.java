@@ -12,14 +12,36 @@ public class EmployeeService {
      * the count of employees in the system.
      * It does it by calling the
      * static count method on the Employee class.
+     *
      * @return Total number of employees in the system.
      */
     public int getEmployeeCount() {
         return Employee.count();
     }
 
-    public void saveEmployee(Employee employee){
+    public void saveEmployee(Employee employee) {
 
+    }
+
+    /**
+     * This method is responsible to increment the salary
+     * of all employees in the system by the given percentage.
+     * It does this by calling the static giveIncrementOf method
+     * on the Employee class.
+     *
+     * @param percentage the percentage value by which
+     *                   salaries would be increased
+     * @return true if the increment was successful.
+     * False if increment failed because of some exception
+     * otherwise.
+     */
+    public boolean giveIncrementToAllEmployeesOf(int percentage) {
+        try {
+            Employee.giveIncrementOf(percentage);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
 
