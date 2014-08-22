@@ -5,6 +5,7 @@ import com.jianchen.vo.Employee;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 
@@ -135,4 +136,25 @@ public class EmployeeControllerTest {
         //This is done by actually invoking the static method.
         Employee.giveIncrementOf(9);
     }
+
+    /**
+     * 验证调用方法的顺序，InOrder的使用
+     */
+    @Test
+    public void shouldInvokeIsNewBeforeInvokingCreate() {
+        Employee mock = PowerMockito.mock(Employee.class);
+        EmployeeService employeeService = new EmployeeService();
+        employeeService.saveEmployee(mock);
+        //First we have to let PowerMock know that the verification order is going to be important
+        //This is done by calling Mockito.inOrder and passing
+        //it the mocked object.
+        InOrder inOrder = Mockito.inOrder(mock);
+        //Next, we can continue our verification using
+        //the inOrder instance using the same technique
+        //as seen earlier.
+        inOrder.verify(mock).isNew();
+        inOrder.verify(mock).update();
+        inOrder.verify(mock, Mockito.never()).create();
+    }
+
 }

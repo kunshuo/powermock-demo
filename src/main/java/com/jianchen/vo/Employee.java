@@ -63,4 +63,8 @@ public class Employee {
     public void create() {
         throw new UnsupportedOperationException();
     }
+
+    public void setEmployeeId(int id) {
+        throw new UnsupportedOperationException();
+    }
 }

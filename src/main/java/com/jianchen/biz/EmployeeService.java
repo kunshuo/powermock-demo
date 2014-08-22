@@ -1,5 +1,6 @@
 package com.jianchen.biz;
 
+import com.jianchen.util.EmployeeIdGenerator;
 import com.jianchen.vo.Employee;
 
 /**
@@ -20,7 +21,12 @@ public class EmployeeService {
     }
 
     public void saveEmployee(Employee employee) {
-
+        if (employee.isNew()) {
+            employee.setEmployeeId(EmployeeIdGenerator.getNextId());
+            employee.create();
+            return;
+        }
+        employee.update();
     }
 
     /**
