@@ -6,10 +6,13 @@ package com.jianchen.vo;
  */
 public class Employee {
 
+    private String email;
+
     public Employee() {
     }
 
     public Employee(String email) {
+        this.email = email;
     }
 
     /**
@@ -72,5 +75,9 @@ public class Employee {
 
     public void setEmployeeId(int id) {
         throw new UnsupportedOperationException();
+    }
+
+    public String getEmail() {
+        return this.email;
     }
 }

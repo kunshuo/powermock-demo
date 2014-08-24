@@ -35,6 +35,11 @@ public class EmployeeController {
         employeeService.saveEmployee(employee);
     }
 
+
+    public int getEmployeeCount() {
+        return employeeService.getEmployeeCount();
+    }
+
     /**
      * The method that will
      * find an employee by their email.

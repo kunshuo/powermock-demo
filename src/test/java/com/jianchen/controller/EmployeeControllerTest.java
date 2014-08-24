@@ -5,8 +5,11 @@ import com.jianchen.vo.Employee;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 
 /**
@@ -189,7 +192,108 @@ public class EmployeeControllerTest {
         Assert.assertNull(employeeController.findEmployeeByEmail("deep@gitshah.com"));
         Assert.assertNull(employeeController.findEmployeeByEmail("deep@packtpub.com"));
         Assert.assertNull(employeeController.findEmployeeByEmail("noreply@packtpub.com"));
-
     }
 
+    /**
+     * 定制match
+     */
+    @Test
+    public void shouldReturnTrueIfEmployeeEmailIsAlreadyTaken() {
+        final EmployeeService mock = PowerMockito.mock(EmployeeService.class);
+        //A little more complex matcher using the ArgumentMatcher class.
+        //By implementing the matches method in this class we can write any kind of complex logic
+        //to validate that the correct arguments are being passed.
+        final String employeeEmail = "packt@gitshah.com";
+        PowerMockito.when(mock.employeeExists(Mockito.argThat(new ArgumentMatcher<Employee>() {
+            /**
+             * This method currently only checks that
+             * the email address set in the employee instance
+             * matches the email address we passed to the controller.
+             * {@inheritDoc}
+             */
+            @Override
+            public boolean matches(Object employee) {
+                return ((Employee) employee).getEmail().equals(employeeEmail);
+            }
+        }))).thenReturn(true);
+        final EmployeeController employeeController = new EmployeeController(mock);
+        Assert.assertTrue(employeeController.isEmployeeEmailAlreadyTaken(employeeEmail));
+    }
+
+    /**
+     * answer返回值
+     */
+    @Test
+    public void shouldFindEmployeeByEmailUsingTheAnswerInterface() {
+        final EmployeeService mock = PowerMockito.mock(EmployeeService.class);
+        final Employee employee = new Employee();
+        //Notice use of Answer interface.
+        //Depending on what argument is passed we could either
+        //return a valid employee
+        //or return null.
+        PowerMockito.when(mock.findEmployeeByEmail(Mockito.anyString())).then(new Answer<Employee>() {
+            /**
+             * Implementing the answer method to return a valid
+             * employee, * if email starts with "deep" or ends "packtpub.com"
+             * in all other cases we return null.
+             * {@inheritDoc}
+             */
+            @Override
+            public Employee answer(InvocationOnMock invocation) throws Throwable {
+                final String email = (String) invocation.getArguments()[0];
+                if (email == null) return null;
+                if (email.startsWith("deep"))
+                    return employee;
+                if (email.endsWith("packtpub.com"))
+                    return employee;
+                return null;
+            }
+        });
+        final EmployeeController employeeController = new EmployeeController(mock);
+        //Following 3 invocations will match and return valid //employee,
+        //since the email address passed does start with "deep" //or ends with "packtpub.com"
+        Assert.assertSame(employee, employeeController.findEmployeeByEmail("deep@gitshah.com"));
+        Assert.assertSame(employee, employeeController.findEmployeeByEmail("deep@packtpub.com"));
+        Assert.assertSame(employee, employeeController.findEmployeeByEmail("noreply@packtpub.com"));
+        //However, this next invocation would not return a valid //employee,
+        //since the email address passed does not start with //"deep" or ends with "packtpub.com"
+        Assert.assertNull(employeeController.findEmployeeByEmail("hello@world.com"));
+    }
+
+
+    @Test
+    public void shouldReturnCountOfEmployeesFromTheServiceWithDefaultAnswer() {
+        //Creating a mock using the PowerMockito.mock method for the
+        //EmployeeService class.
+        EmployeeService mock = PowerMockito.mock(EmployeeService.class,
+                /**
+                 * Passing in a default answer instance.
+                 * This method will be called when no matching mock methods have been setup.
+                 */
+                new Answer() {
+                    /**
+                     * We are simply implementing the answer method of the
+                     interface and returning hardcoded 10.
+                     * @param invocation The context of the invocation.
+                     *        Holds useful information like what arguments where passed.
+                     * @return Object the value to return for this mock.
+                     */
+                    @Override
+                    public Object answer(InvocationOnMock invocation) {
+                        return 10;
+                    }
+                });
+        //note:没有显式的指定mock方法的返回值，此处用answer就会默认返回每个方法的返回值
+        EmployeeController employeeController = new EmployeeController(mock);
+        Assert.assertEquals(10, employeeController.getEmployeeCount());
+        //note:如果执行下面注释掉的语句，就会报错，因为employeeService.findEmployeeByEmail(email)也会返回10
+        //然后类型转换就会失败，因为正常应该返回Employee类型
+        Assert.assertTrue(employeeController.findEmployeeByEmail("abc") instanceof Employee);
+    }
+
+
+    /**
+     * 部分mock，针对某些需要mock的实例，我们可能只需mock部分方法，其他的方法还是希望调用具体的实现。这样就用到了spy
+     */
 }
+

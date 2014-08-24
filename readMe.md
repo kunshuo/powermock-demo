@@ -30,3 +30,19 @@ Most of the mocking frameworks are based on the use of the Proxy pattern (see ht
 The Proxy pattern is heavily dependent on the fact that a class can be subclassed and a method can be overridden. Because of this reason,
 most of the mocking frameworks cannot mock final methods or classes.
 Since PowerMock uses a custom class loader and bytecode manipulation, it is able to achieve what other mocking frameworks fail to do.
+
+Answer的使用：
+The Answer interface specifies an action to execute along with the return value. The return value is returned when the given method is invoked on the mock.
+The instance of InvocationOnMock passed as an argument to the answer method of the Answer interface is quite resourceful. Using this we can do the following:
+ callRealMethod(): Call the real method
+ getArguments(): Get all arguments passed to the method invocation
+ getMethod(): Return the method that was invoked on the mock instance
+ getMock(): Get the mocked instance
+
+spy: mock部分方法
+Spies are designed in such a way that they will invoke real methods for all methods that are not mocked.
+This is the reason we need to pass in an instance of the class that is to be partially mocked (in our case the EmployeeService class)
+while creating a spy using the PowerMockito.spy method.
+
+*******************
+To mock any method on a spy, we have to necessarily use the PowerMockito. doNothing()/doReturn()/doThrow() syntax only.

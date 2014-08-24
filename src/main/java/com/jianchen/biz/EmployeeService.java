@@ -22,13 +22,26 @@ public class EmployeeService {
 
     public void saveEmployee(Employee employee) {
         if (employee.isNew()) {
-            employee.setEmployeeId(EmployeeIdGenerator.getNextId());
-            employee.create();
-            WelcomeEmail emailSender = new WelcomeEmail(employee, "Welcome to Mocking with PowerMock How-to!");
-            emailSender.send();
+            createEmployee(employee);
             return;
         }
         employee.update();
+    }
+
+    /**
+     * The createEmployee method
+     * extracted from the saveEmployee.
+     * This method is only responsible
+     * to do things that are required
+     * to create a new employee.
+     *
+     * @param employee instance to save.
+     */
+    void createEmployee(Employee employee) {
+        employee.setEmployeeId(EmployeeIdGenerator.getNextId());
+        employee.create();
+        WelcomeEmail emailSender = new WelcomeEmail(employee, "Welcome to Mocking with PowerMock How-to!");
+        emailSender.send();
     }
 
     /**
