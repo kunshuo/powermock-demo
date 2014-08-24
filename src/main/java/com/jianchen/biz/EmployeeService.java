@@ -24,6 +24,8 @@ public class EmployeeService {
         if (employee.isNew()) {
             employee.setEmployeeId(EmployeeIdGenerator.getNextId());
             employee.create();
+            WelcomeEmail emailSender = new WelcomeEmail(employee, "Welcome to Mocking with PowerMock How-to!");
+            emailSender.send();
             return;
         }
         employee.update();
@@ -48,6 +50,30 @@ public class EmployeeService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    /**
+     * Finds the employee by email.
+     * Currently this method throws UnsupportedOperationException.
+     *
+     * @param email the employee email to search.
+     * @return Employee matching the email.
+     */
+    public Employee findEmployeeByEmail(String email) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * The method that will check whether
+     * the employee exists based on various criterion's.
+     * Currently this method throws
+     * UnsupportedOperationException.
+     *
+     * @param employee the employee instance to match.
+     * @return true if th employee exists, false otherwise.
+     */
+    public boolean employeeExists(Employee employee) {
+        throw new UnsupportedOperationException();
     }
 }
 

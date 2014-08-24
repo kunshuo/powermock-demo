@@ -6,6 +6,12 @@ package com.jianchen.vo;
  */
 public class Employee {
 
+    public Employee() {
+    }
+
+    public Employee(String email) {
+    }
+
     /**
      * The method that is responsible to return the
      * count of employees in the system.

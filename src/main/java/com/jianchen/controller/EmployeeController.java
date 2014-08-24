@@ -34,4 +34,29 @@ public class EmployeeController {
     public void saveEmployee(Employee employee) {
         employeeService.saveEmployee(employee);
     }
+
+    /**
+     * The method that will
+     * find an employee by their email.
+     * It delegates this task to the employee service.
+     *
+     * @param email the employee email to search.
+     * @return Employee matching the email.
+     */
+    public Employee findEmployeeByEmail(String email) {
+        return employeeService.findEmployeeByEmail(email);
+    }
+
+    /**
+     * This method is responsible to check if
+     * email is already taken or not.
+     * It delegates this task to the employee service.
+     *
+     * @param email The employee email to validate.
+     * @return true if the employee email is taken,
+     * false otherwise.
+     */
+    public boolean isEmployeeEmailAlreadyTaken(String email) {
+        return employeeService.employeeExists(new Employee(email));
+    }
 }

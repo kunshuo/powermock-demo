@@ -1,5 +1,11 @@
 1,easyMock的版本低，会导致运行时报mock的静态方法类为非接口的错误。
 
+mock 静态方法
+mock final方法
+mock 构造器
+mock 私有方法
+argument matchers to assert that methods are invoked with correct arguments. (mockito本身就支持)
+
 学习笔记：
 测试类上的注解说明：
 @PrepareForTest

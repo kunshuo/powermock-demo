@@ -157,4 +157,39 @@ public class EmployeeControllerTest {
         inOrder.verify(mock, Mockito.never()).create();
     }
 
+    /**
+     * 方法参数的matcher
+     */
+    @Test
+    public void shouldFindEmployeeByEmail() {
+        final EmployeeService mock = PowerMockito.mock(EmployeeService.class);
+        final Employee employee = new Employee();
+        //Notice that we are just check if the email address starts with "deep" then we have found the matching employee.
+        PowerMockito.when(mock.findEmployeeByEmail(Mockito.startsWith("deep"))).thenReturn(employee);
+        final EmployeeController employeeController = new EmployeeController(mock);
+        //Following 2 invocations will match return valid employee,
+        //since the email address passed does start with "deep"
+        Assert.assertSame(employee, employeeController.findEmployeeByEmail("deep@gitshah.com"));
+        Assert.assertSame(employee, employeeController.findEmployeeByEmail("deep@packtpub.com"));
+        //However, this next invocation would not return a valid employee,
+        //since the email address passed does not start with "deep"
+        Assert.assertNull(employeeController.findEmployeeByEmail("noreply@packtpub.com"));
+    }
+
+    /**
+     * match anything
+     */
+    @Test
+    public void shouldReturnNullIfNoEmployeeFoundByEmail() {
+        final EmployeeService mock = PowerMockito.mock(EmployeeService.class);
+        //No matter what email is passed calling the findEmployeeByEmail on the
+        //mocked EmployeeService instance is now going to return null.
+        PowerMockito.when(mock.findEmployeeByEmail(Mockito.anyString())).thenReturn(null);
+        final EmployeeController employeeController = new EmployeeController(mock);
+        Assert.assertNull(employeeController.findEmployeeByEmail("deep@gitshah.com"));
+        Assert.assertNull(employeeController.findEmployeeByEmail("deep@packtpub.com"));
+        Assert.assertNull(employeeController.findEmployeeByEmail("noreply@packtpub.com"));
+
+    }
+
 }
