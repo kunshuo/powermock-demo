@@ -83,7 +83,7 @@ public class Employee {
     }
 
     public long getSalary() {
-        throw new UnsupportedOperationException();
+        return this.salary;
     }
 
     public void setSalary(long salary) {

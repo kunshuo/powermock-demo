@@ -2,7 +2,10 @@ package com.jianchen.vo;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.ArrayList;
@@ -14,6 +17,8 @@ import java.util.List;
  * @author: jian.cai@qunar.com
  * @Date: 14-8-24 Time: 下午9:25
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Department.class)
 public class DepartmentTest {
     @Test
     public void shouldVerifyThatNewEmployeeIsAddedToTheDepartment() throws Exception {
@@ -55,12 +60,12 @@ public class DepartmentTest {
         employees.add(employee1);
         employees.add(employee2);
         //Substituting the privately held employees list with our test list.
-        Whitebox.setInternalState(department, "employees",employees);
+        Whitebox.setInternalState(department, "employees", employees);
         //Invoking the private method updateMaxSalaryOffered on the department instance.
-        Whitebox.invokeMethod(department,"updateMaxSalaryOffered");
-        //Getting the value of maxSalary from the private field.
-       // final long maxSalary = Whitebox.getInternalState(department, "maxSalaryOffered");
-        //Assert.assertEquals(65000, maxSalary);
+        Whitebox.invokeMethod(department, "updateMaxSalaryOffered");
+        //Getting the value of maxSalary from the private field.还可以调用另外三个参数的方法，指定该字段在类层次上的哪个类上出现的
+        final long maxSalary = (Long) Whitebox.getInternalState(department, "maxSalaryOffered");
+        Assert.assertEquals(65000, maxSalary);
     }
 
 
