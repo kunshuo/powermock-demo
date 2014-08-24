@@ -10,6 +10,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.lang.reflect.Method;
+
 /**
  * @author: jian.cai@qunar.com
  * @Date: 14-8-21 Time: 下午1:19
@@ -105,7 +107,7 @@ public class EmployeeServiceTest {
     }
 
     /**
-     * spy一个private方法
+     * spy一个private方法,传递了方法名以及参数
      */
     @Test
     public void shouldInvokeThePrivateCreateEmployeeMethodWhileSavingANewEmployee() throws Exception {
@@ -123,5 +125,25 @@ public class EmployeeServiceTest {
         PowerMockito.verifyPrivate(spy).invoke("createEmployee", employeeMock);
     }
 
+    /**
+     * 不用指定方法名，spy一个私有方法
+     *
+     * @throws Exception
+     */
+    @Test
+    public void shouldInvokeThePrivateCreateEmployeeMethodWithoutSpecifyingMethodName() throws Exception {
+        final EmployeeService spy = PowerMockito.spy(new EmployeeService());
+        final Employee employeeMock = PowerMockito.mock(Employee.class);
+        PowerMockito.when(employeeMock.isNew()).thenReturn(true);
+        //Finding the methods from EmployeeService class that take Employee as their argument.
+        final Method createEmployeeMethod = PowerMockito.method(EmployeeService.class, Employee.class);
+        //Passing the method instance found in previous step to the when method.
+        //This sets up the mock on the private method.
+        PowerMockito.doNothing().when(spy, createEmployeeMethod).withArguments(employeeMock);
+        spy.saveEmployee(employeeMock);
+        //Verifying that the private method was indeed invoked
+        //using the same method instance we found earlier.
+        PowerMockito.verifyPrivate(spy).invoke(createEmployeeMethod).withArguments(employeeMock);
+    }
 
 }

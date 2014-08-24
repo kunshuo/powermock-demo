@@ -7,6 +7,7 @@ package com.jianchen.vo;
 public class Employee {
 
     private String email;
+    private long salary;
 
     public Employee() {
     }
@@ -79,5 +80,13 @@ public class Employee {
 
     public String getEmail() {
         return this.email;
+    }
+
+    public long getSalary() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void setSalary(long salary) {
+        this.salary = salary;
     }
 }
